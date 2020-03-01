@@ -1,7 +1,6 @@
 (function () {
+    let expiration = 0;//default 永久
     let div = document.createElement("div");
-    // div.setAttribute("id", "shareWindow");
-    // div.setAttribute("style", "position: fixed;z-index: 999;right: 0;");
     let html = "<div id='shareWindow' style='position: fixed;z-index: 999;right: 0;'><button id='batchShare'>批量单独分享</button><button id='toggleResult' style=''>显示/关闭结果</button></div><div id='shareResult' style='display: none;position: relative;background-color: wheat;margin: auto;padding-top: .5rem;font-size: 16px;scroll-behavior: auto;text-align: center;max-width: 50%;z-index: 900;' contenteditable='true'>空空</div>";
     div.innerHTML = html;
     let result = [];
@@ -44,7 +43,7 @@
         document.querySelector("[data-button-id='b41']").click();
 
         let i1 = setInterval(function () {
-            let forever = document.querySelector(".choose-list li");
+            let forever = document.querySelector(".choose-list li[value='" + expiration + "']");
             if (forever) {
                 clearInterval(i1);
                 triggerEvent(forever, "mousedown");
@@ -55,6 +54,8 @@
                     let file = document.querySelector("#share .select-text").innerText.replace("分享文件(夹):", '');
                     if (pw.length > 0 && href.length > 0) {
                         clearInterval(i2);
+                        document.querySelector("input.share-url").value = '';
+                        document.querySelector("input.share-password").value = '';
                         console.log(file, href, pw);
                         let r = [];
                         result[file] = [href, pw];
@@ -79,5 +80,11 @@
             console.log(e)
         }
     }
+
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+        // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
+        expiration = request.v || 0;
+        sendResponse('我收到了你的消息！');
+    });
 })();
 
