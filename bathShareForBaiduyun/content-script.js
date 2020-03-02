@@ -66,9 +66,9 @@
                         }
                         loop(list);
                     }
-                }, 100);
+                }, 200);
             }
-        }, 100);
+        }, 200);
     }
 
     function triggerEvent(el, eventName) {
@@ -82,9 +82,7 @@
     }
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
         expiration = request.v || 0;
-        sendResponse('我收到了你的消息！');
+        sendResponse('content-script received the massage！');
     });
 })();
-

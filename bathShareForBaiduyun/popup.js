@@ -6,10 +6,10 @@ function sendMessageToContentScript(message, callback) {
     });
 }
 
-document.querySelector("#expiration").onclick = function (e, i) {
+document.querySelector("#expiration").onclick = function () {
     let v = document.getElementById("expiration").value;
     console.log(v);
     sendMessageToContentScript({v: v}, function (response) {
-        console.log('来自content的回复：' + response);
+        console.log('respond of content-script:' + response);
     });
 };
